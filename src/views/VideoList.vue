@@ -21,8 +21,7 @@
 
 <script>
 export default {
-  name: "HelloWorld",
-
+  name: "VideoList",
   data: () => ({
     search: "",
     headers: [
@@ -53,3 +52,6 @@ export default {
   }),
 };
 </script>
+
+<style>
+</style>

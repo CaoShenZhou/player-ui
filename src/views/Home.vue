@@ -1,15 +1,17 @@
 <template>
-  <hello-world />
+  <v-row>
+    <v-col v-for="n in 4" :key="n" cols="6">
+      <v-card height="400"></v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld";
-
 export default {
   name: "Home",
 
-  components: {
-    HelloWorld,
-  },
+  data: () => ({}),
+
+  components: {},
 };
 </script>
