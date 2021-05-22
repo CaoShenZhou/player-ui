@@ -1,28 +1,63 @@
 <template>
-  <v-card>
-    <v-card-title>
-      视频列表
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="搜索"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
-    <v-data-table
-      :headers="headers"
-      :items="desserts"
-      :search="search"
-    ></v-data-table>
-  </v-card>
+  <v-row>
+    <v-col cols="12">
+      <v-card>
+        <v-card-title>
+          <!-- 工具栏 -->
+          <v-toolbar :elevation="0">
+            <v-toolbar-title class="mr-2">SQL主机列表</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn outlined @click="getSqlHostList()">
+              <span>刷新</span>
+              <v-icon right>mdi-cached</v-icon>
+            </v-btn>
+          </v-toolbar>
+        </v-card-title>
+        <!-- 分割线 -->
+        <v-divider></v-divider>
+        <v-text-field
+          v-model="path"
+          label="添加路径"
+          single-line
+          hide-details
+          class="mx-4"
+        >
+          <template v-slot:append-outer>
+            <v-icon @click="clickMe()">mdi-plus-circle-outline</v-icon>
+          </template>
+        </v-text-field>
+        <v-text-field
+          v-model="search"
+          label="搜索"
+          single-line
+          hide-details
+          class="mx-4"
+        >
+          <template v-slot:append-outer>
+            <v-icon @click="clickMe()">mdi-magnify</v-icon>
+          </template></v-text-field
+        >
+        <v-data-table
+          :headers="headers"
+          :items="desserts"
+          :search="search"
+        ></v-data-table>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 export default {
   name: "VideoList",
+  methods: {
+    clickMe() {
+      alert(11);
+    },
+  },
   data: () => ({
+    path: "",
+    loading: false,
     search: "",
     headers: [
       {
