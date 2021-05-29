@@ -2,8 +2,8 @@
   <v-app>
     <v-app-bar app>
       <v-tabs centered class="ml-n9">
-        <v-tab v-for="link in links" :key="link" :to="link.url">
-          {{ link.title }}
+        <v-tab v-for="nav in navLinks" :key="nav.url" :to="nav.url">
+          {{ nav.title }}
         </v-tab>
       </v-tabs>
     </v-app-bar>
@@ -20,10 +20,9 @@ export default {
   name: "App",
 
   data: () => ({
-    links: [
+    navLinks: [
       {
         title: "首页",
-        // icon: "mdi-dip-switch",
         url: "/",
       },
       {
