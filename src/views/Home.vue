@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title>
         多片同看
-        <v-btn class="ml-2" small outlined>
+        <v-btn class="ml-2" small outlined @click="getVideoList()">
           <span>换一批</span>
           <v-icon right>mdi-cached</v-icon>
         </v-btn>
@@ -57,27 +57,7 @@ export default {
   },
 
   created() {
-    // 屏幕大小
-    let screenSize = this.$vuetify.breakpoint.name;
-    // 如果是最小屏
-    if (screenSize == "xs") {
-      // 将播放器控制栏取消
-      this.playerOptionsTemplate.controls = false;
-    }
-    for (let i = 0; i < 2; i++) {
-      this.playerOptionsArr[i] = JSON.parse(
-        JSON.stringify(this.playerOptionsTemplate)
-      );
-      this.playerOptionsArr[i].id = i;
-      if (i == 0) {
-        this.playerOptionsArr[i].sources = "video/mp4";
-        this.playerOptionsArr[i].sources = "http://vjs.zencdn.net/v/oceans.mp4";
-      } else if (i == 1) {
-        this.playerOptionsArr[i].sources = "video/webm";
-        this.playerOptionsArr[i].sources =
-          "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm";
-      }
-    }
+    this.getVideoList();
   },
 
   data: () => ({
@@ -102,5 +82,49 @@ export default {
       },
     },
   }),
+
+  methods: {
+    getVideoList() {
+      this.videoList = [];
+      this.playerOptionsArr = [];
+      this.$get("/video/list").then((res) => {
+        this.videoList = res;
+        let playerOptionsId = [];
+        // 随机排列对象数组
+        for (var i = this.videoList.length - 1; i >= 0; i--) {
+          var randomIndex = Math.floor(Math.random() * (i + 1));
+          var itemAtIndex = this.videoList[randomIndex];
+          this.videoList[randomIndex] = this.videoList[i];
+          this.videoList[i] = itemAtIndex;
+        }
+        for (let i = 0; i < this.videoList.length; i++) {
+          // 避免出现重复的视频
+          if (playerOptionsId.indexOf(this.videoList[i].id) == -1) {
+            playerOptionsId.push(this.videoList[i].id);
+            // 屏幕大小
+            let screenSize = this.$vuetify.breakpoint.name;
+            // 如果是最小屏
+            if (screenSize == "xs") {
+              // 将播放器控制栏取消
+              this.playerOptionsTemplate.controls = false;
+            }
+            let playerOptions = JSON.parse(
+              JSON.stringify(this.playerOptionsTemplate)
+            );
+            playerOptions.id = this.videoList[i].id;
+            playerOptions.sources = "video/" + this.videoList[i].format;
+            playerOptions.sources =
+              "http://127.0.0.1:8090/data/" + this.videoList[i].name;
+            this.playerOptionsArr.push(playerOptions);
+            // 如果视频数量达到4个就退出循环
+            if (this.playerOptionsArr.length == 4) {
+              break;
+            }
+          }
+        }
+        console.log(this.playerOptionsArr);
+      });
+    },
+  },
 };
 </script>

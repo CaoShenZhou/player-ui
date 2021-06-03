@@ -6,9 +6,9 @@
           <v-card-title>
             <!-- 工具栏 -->
             <v-toolbar :elevation="0">
-              <v-toolbar-title class="mr-2">SQL主机列表</v-toolbar-title>
+              <v-toolbar-title class="mr-2">视频列表</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn outlined>
+              <v-btn outlined @click="getVideoList()">
                 <span>刷新</span>
                 <v-icon right>mdi-cached</v-icon>
               </v-btn>
@@ -39,10 +39,18 @@
             </template>
           </v-text-field>
           <v-data-table
+            :loading="loading"
             :headers="headers"
-            :items="desserts"
+            :items="videoList"
             :search="search"
-          ></v-data-table>
+          >
+            <template v-slot:item.operate="{ item }">
+              <v-icon class="mr-2" @click="editItem(item)">
+                mdi-play-circle
+              </v-icon>
+              <v-icon @click="deleteItem(item)">mdi-delete-circle</v-icon>
+            </template>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -52,11 +60,6 @@
 <script>
 export default {
   name: "VideoList",
-  methods: {
-    clickMe() {
-      alert(11);
-    },
-  },
   data: () => ({
     path: "",
     loading: false,
@@ -66,26 +69,32 @@ export default {
         text: "编号",
         align: "start",
         sortable: false,
-        value: "uuid",
+        value: "id",
       },
       { text: "名称", value: "name" },
       { text: "MD5", sortable: false, value: "md5" },
       { text: "格式", value: "format" },
       { text: "大小", value: "size" },
-      { text: "时长", value: "protein" },
+      { text: "时长", value: "duration" },
       { text: "分辨率", value: "resolution" },
+      { text: "创建时间", value: "createTime" },
+      { text: "更新时间", value: "updateTime" },
+      { text: "操作", value: "operate" },
     ],
-    desserts: [
-      {
-        uuid: "1",
-        name: "三国志",
-        md5: "F681F98BB01FF254232BFE8FF4662B16",
-        format: "mp4",
-        size: "30M",
-        protein: 4.0,
-        resolution: "1920*1080",
-      },
-    ],
+    videoList: [],
   }),
+  created() {
+    this.getVideoList();
+  },
+  methods: {
+    getVideoList() {
+      this.loading = true;
+      this.videoList = [];
+      this.$get("/video/list").then((res) => {
+        this.videoList = res;
+        this.loading = false;
+      });
+    },
+  },
 };
 </script>
