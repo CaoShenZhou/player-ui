@@ -3,41 +3,54 @@
     <v-card>
       <v-card-title>
         多片同看
-        <v-btn class="ml-2" small outlined @click="getVideoList()">
-          <span>换一批</span>
-          <v-icon right>mdi-cached</v-icon>
-        </v-btn>
         <v-spacer></v-spacer>
-        <v-text-field
-          append-icon="mdi-magnify"
-          label="搜索"
-          filled
-          rounded
-          dense
-          single-line
-          hide-details
-        ></v-text-field>
+        <v-btn fab x-small @click="getVideoList()">
+          <v-icon color="green">mdi-cached</v-icon>
+        </v-btn>
       </v-card-title>
-
-      <v-row class="mx-0" align="center">
-        <v-col
-          cols="12"
-          md="6"
-          lg="6"
-          xl="6"
-          v-for="playerOptions in playerOptionsArr"
-          :key="playerOptions.id"
-        >
-          <v-card>
-            <video-player
-              class="vjs-custom-skin"
-              ref="videoPlayer"
-              :playsinline="true"
-              :options="playerOptions"
-            ></video-player>
-          </v-card>
-        </v-col>
-      </v-row>
+      <v-divider></v-divider>
+      <v-card-text>
+        <v-row>
+          <v-col
+            cols="12"
+            md="6"
+            lg="6"
+            xl="6"
+            v-for="(playerOptions, index) in playerOptionsArr"
+            :key="playerOptions.id"
+          >
+            <v-card>
+              <video-player
+                class="vjs-custom-skin"
+                ref="videoPlayer"
+                :playsinline="true"
+                :options="playerOptions"
+              ></video-player>
+              <v-card-actions>
+                <v-btn
+                  class="mr-2"
+                  fab
+                  x-small
+                  @click="
+                    updateVideoLike(
+                      index,
+                      playerOptions.id,
+                      !playerOptions.like
+                    )
+                  "
+                >
+                  <v-icon :color="playerOptions.like ? 'pink' : ''">
+                    {{ playerOptions.like ? "mdi-heart" : "mdi-heart-outline" }}
+                  </v-icon>
+                </v-btn>
+                <v-btn fab x-small @click="playVideo(playerOptions.id)">
+                  <v-icon>mdi-television</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card-text>
     </v-card>
   </div>
 </template>
@@ -115,6 +128,7 @@ export default {
             playerOptions.sources = "video/" + this.videoList[i].format;
             playerOptions.sources =
               "http://127.0.0.1:8090/data/" + this.videoList[i].name;
+            playerOptions.like = this.videoList[i].like;
             this.playerOptionsArr.push(playerOptions);
             // 如果视频数量达到4个就退出循环
             if (this.playerOptionsArr.length == 4) {
@@ -122,7 +136,18 @@ export default {
             }
           }
         }
-        console.log(this.playerOptionsArr);
+      });
+    },
+    updateVideoLike(index, id, isLike) {
+      this.$post("/video/update-like", { id: id, like: isLike }).then((res) => {
+        if (res) {
+          this.playerOptionsArr[index].like = isLike;
+        }
+      });
+    },
+    playVideo(id) {
+      this.$router.push({
+        path: `/video/${id}`,
       });
     },
   },

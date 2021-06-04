@@ -1,59 +1,58 @@
 <template>
   <div>
-    <v-row>
-      <v-col cols="12">
-        <v-card>
-          <v-card-title>
-            <!-- 工具栏 -->
-            <v-toolbar :elevation="0">
-              <v-toolbar-title class="mr-2">视频列表</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn outlined @click="getVideoList()">
-                <span>刷新</span>
-                <v-icon right>mdi-cached</v-icon>
-              </v-btn>
-            </v-toolbar>
-          </v-card-title>
-          <!-- 分割线 -->
-          <v-divider></v-divider>
-          <v-text-field
-            v-model="path"
-            label="添加路径"
-            single-line
-            hide-details
-            class="mx-4"
-          >
-            <template v-slot:append-outer>
-              <v-icon>mdi-plus-circle-outline</v-icon>
-            </template>
-          </v-text-field>
-          <v-text-field
-            v-model="search"
-            label="搜索"
-            single-line
-            hide-details
-            class="mx-4"
-          >
-            <template v-slot:append-outer>
-              <v-icon>mdi-magnify</v-icon>
-            </template>
-          </v-text-field>
-          <v-data-table
-            :loading="loading"
-            :headers="headers"
-            :items="videoList"
-            :search="search"
-          >
-            <template v-slot:item.operate="{ item }">
-              <v-icon class="mr-2" @click="editItem(item)">
-                mdi-play-circle
-              </v-icon>
-              <v-icon @click="deleteItem(item)">mdi-delete-circle</v-icon>
-            </template>
-          </v-data-table>
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-card>
+      <v-card-title>
+        视频列表
+        <v-spacer></v-spacer>
+        <v-btn fab x-small @click="getVideoList()">
+          <v-icon color="green">mdi-cached</v-icon>
+        </v-btn>
+      </v-card-title>
+      <!-- 分割线 -->
+      <v-divider></v-divider>
+      <v-text-field
+        v-model="path"
+        label="添加路径"
+        single-line
+        hide-details
+        class="mx-4"
+      >
+        <template v-slot:append-outer>
+          <v-icon>mdi-plus-circle-outline</v-icon>
+        </template>
+      </v-text-field>
+      <v-text-field
+        v-model="search"
+        label="搜索"
+        single-line
+        hide-details
+        class="mx-4"
+      >
+        <template v-slot:append-outer>
+          <v-icon>mdi-magnify</v-icon>
+        </template>
+      </v-text-field>
+      <v-data-table
+        :loading="loading"
+        :headers="headers"
+        :items="videoList"
+        :search="search"
+      >
+        <template v-slot:item.like="{ item }">
+          <v-btn fab x-small @click="updateVideoLike(item.id, !item.like)">
+            <v-icon :color="item.like ? 'pink' : ''">
+              {{ item.like ? "mdi-heart" : "mdi-heart-outline" }}
+            </v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:item.operate="{ item }">
+          <v-icon class="mr-2" @click="playVideo(item.id)">
+            mdi-play-circle
+          </v-icon>
+          <v-icon @click="deleteItem(item)">mdi-delete-circle</v-icon>
+        </template>
+      </v-data-table>
+    </v-card>
   </div>
 </template>
 
@@ -72,6 +71,7 @@ export default {
         value: "id",
       },
       { text: "名称", value: "name" },
+      { text: "是否喜欢", value: "like" },
       { text: "MD5", sortable: false, value: "md5" },
       { text: "格式", value: "format" },
       { text: "大小", value: "size" },
@@ -93,6 +93,18 @@ export default {
       this.$get("/video/list").then((res) => {
         this.videoList = res;
         this.loading = false;
+      });
+    },
+    updateVideoLike(id, isLike) {
+      this.$post("/video/update-like", { id: id, like: isLike }).then((res) => {
+        if (res) {
+          this.getVideoList();
+        }
+      });
+    },
+    playVideo(id) {
+      this.$router.push({
+        path: `/video/${id}`,
       });
     },
   },

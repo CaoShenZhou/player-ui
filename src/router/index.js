@@ -24,6 +24,12 @@ const routes = [
       import("../views/Setting.vue"),
   },
   {
+    path: "/video/:id",
+    name: "Video",
+    component: () =>
+      import("../views/Video.vue"),
+  },
+  {
     path: "/about",
     name: "About",
     component: () =>
