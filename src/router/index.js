@@ -8,32 +8,27 @@ const routes = [
     path: "/",
     alias: "/home",
     name: "Home",
-    component: () =>
-      import("../views/Home.vue"),
+    component: () => import("../views/Home.vue"),
   },
   {
     path: "/video-list",
     name: "VideoList",
-    component: () =>
-      import("../views/VideoList.vue"),
+    component: () => import("../views/VideoList.vue"),
   },
   {
     path: "/setting",
     name: "Setting",
-    component: () =>
-      import("../views/Setting.vue"),
+    component: () => import("../views/Setting.vue"),
   },
   {
     path: "/video/:id",
     name: "Video",
-    component: () =>
-      import("../views/Video.vue"),
+    component: () => import("../views/Video.vue"),
   },
   {
     path: "/about",
     name: "About",
-    component: () =>
-      import("../views/About.vue"),
+    component: () => import("../views/About.vue"),
   },
 ];
 

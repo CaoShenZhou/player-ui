@@ -4,7 +4,11 @@
       <v-card-title>
         视频ID：{{ id }}
         <v-spacer></v-spacer>
-        <v-btn fab x-small @click="updateVideoLike(playerOptions.id, !playerOptions.like)">
+        <v-btn
+          fab
+          x-small
+          @click="updateVideoLike(playerOptions.id, !playerOptions.like)"
+        >
           <v-icon :color="video.like ? 'pink' : ''">
             {{ video.like ? "mdi-heart" : "mdi-heart-outline" }}
           </v-icon>
@@ -97,5 +101,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

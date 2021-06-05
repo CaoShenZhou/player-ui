@@ -4,9 +4,7 @@
       <v-card-title>
         视频目录列表
         <v-spacer></v-spacer>
-        <v-btn fab x-small>
-          <v-icon color="green">mdi-cached</v-icon>
-        </v-btn>
+        <v-icon color="green">mdi-cached</v-icon>
       </v-card-title>
       <!-- 分割线 -->
       <v-divider></v-divider>
@@ -67,5 +65,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

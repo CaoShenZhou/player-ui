@@ -15,7 +15,7 @@ export default {
     return {
       color: "",
       tipsText: "",
-      snackbar: false
+      snackbar: false,
     };
   },
   methods: {
@@ -38,8 +38,8 @@ export default {
       this.color = "#ff5252";
       this.tipsText = msg;
       this.snackbar = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

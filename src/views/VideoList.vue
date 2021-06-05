@@ -4,9 +4,7 @@
       <v-card-title>
         视频列表
         <v-spacer></v-spacer>
-        <v-btn fab x-small @click="getVideoList()">
-          <v-icon color="green">mdi-cached</v-icon>
-        </v-btn>
+        <v-icon color="green" @click="getVideoList()">mdi-cached</v-icon>
       </v-card-title>
       <!-- 分割线 -->
       <v-divider></v-divider>
@@ -39,17 +37,18 @@
         :search="search"
       >
         <template v-slot:item.like="{ item }">
-          <v-btn fab x-small @click="updateVideoLike(item.id, !item.like)">
-            <v-icon :color="item.like ? 'pink' : ''">
-              {{ item.like ? "mdi-heart" : "mdi-heart-outline" }}
-            </v-icon>
-          </v-btn>
+          <v-icon
+            :color="item.like ? 'pink' : ''"
+            @click="updateVideoLike(item.id, !item.like)"
+          >
+            {{ item.like ? "mdi-heart" : "mdi-heart-outline" }}
+          </v-icon>
         </template>
         <template v-slot:item.operate="{ item }">
           <v-icon class="mr-2" @click="playVideo(item.id)">
-            mdi-play-circle
+            mdi-play-circle-outline
           </v-icon>
-          <v-icon @click="deleteItem(item)">mdi-delete-circle</v-icon>
+          <v-icon @click="deleteItem(item)">mdi-delete-circle-outline</v-icon>
         </template>
       </v-data-table>
     </v-card>

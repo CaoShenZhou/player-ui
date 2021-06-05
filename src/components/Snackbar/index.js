@@ -6,7 +6,7 @@ const v = new Vue({
   vuetify,
   render(createElement) {
     return createElement(Snackbar);
-  }
+  },
 });
 
 v.$mount();
@@ -35,5 +35,5 @@ export default {
   info,
   success,
   warning,
-  error
+  error,
 };

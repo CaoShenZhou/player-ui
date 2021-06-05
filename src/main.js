@@ -1,5 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
+import "@mdi/font/css/materialdesignicons.css";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
 import { get, post, patch, put, del } from "./util/htttp";

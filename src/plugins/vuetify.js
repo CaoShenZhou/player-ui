@@ -7,6 +7,6 @@ Vue.use(Vuetify);
 export default new Vuetify({
   lang: {
     locales: { zhHans },
-    current: "zhHans"
-  }
+    current: "zhHans",
+  },
 });

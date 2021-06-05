@@ -4,9 +4,7 @@
       <v-card-title>
         多片同看
         <v-spacer></v-spacer>
-        <v-btn fab x-small @click="getVideoList()">
-          <v-icon color="green">mdi-cached</v-icon>
-        </v-btn>
+        <v-icon color="green" @click="getVideoList()">mdi-cached</v-icon>
       </v-card-title>
       <v-divider></v-divider>
       <v-card-text>

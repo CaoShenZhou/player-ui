@@ -5,7 +5,7 @@ axios.defaults.timeout = 10 * 1000;
 axios.defaults.baseURL = "http://localhost:8090/";
 
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     const data = response.data;
     switch (data.statusCode) {
       case 3018:
@@ -16,7 +16,7 @@ axios.interceptors.response.use(
     }
     return response;
   },
-  error => {
+  (error) => {
     console.log(error.message);
     // 判断请求异常信息中是否含有超时timeout字符串
     if (error.message.includes("timeout")) {
@@ -40,12 +40,12 @@ export function get(url, params = {}) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
-        params: params
+        params: params,
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -59,10 +59,10 @@ export function get(url, params = {}) {
 export function post(url, data = {}) {
   return new Promise((resolve, reject) => {
     axios.post(url, data).then(
-      response => {
+      (response) => {
         resolve(response.data);
       },
-      err => {
+      (err) => {
         reject(err);
       }
     );
@@ -77,10 +77,10 @@ export function post(url, data = {}) {
 export function patch(url, data = {}) {
   return new Promise((resolve, reject) => {
     axios.patch(url, data).then(
-      response => {
+      (response) => {
         resolve(response.data);
       },
-      err => {
+      (err) => {
         reject(err);
       }
     );
@@ -95,10 +95,10 @@ export function patch(url, data = {}) {
 export function put(url, data = {}) {
   return new Promise((resolve, reject) => {
     axios.put(url, data).then(
-      response => {
+      (response) => {
         resolve(response.data);
       },
-      err => {
+      (err) => {
         reject(err);
       }
     );
@@ -114,12 +114,12 @@ export function del(url, params = {}) {
   return new Promise((resolve, reject) => {
     axios
       .delete(url, {
-        params: params
+        params: params,
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
