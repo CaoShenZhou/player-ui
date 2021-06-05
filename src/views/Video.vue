@@ -4,15 +4,12 @@
       <v-card-title>
         视频ID：{{ id }}
         <v-spacer></v-spacer>
-        <v-btn
-          fab
-          x-small
-          @click="updateVideoLike(playerOptions.id, !playerOptions.like)"
-        >
-          <v-icon :color="video.like ? 'pink' : ''">
+          <v-icon
+            :color="video.like ? 'pink' : ''"
+            @click="updateVideoLike(video.id, !video.like)"
+          >
             {{ video.like ? "mdi-heart" : "mdi-heart-outline" }}
           </v-icon>
-        </v-btn>
       </v-card-title>
       <!-- 分割线 -->
       <v-divider></v-divider>
@@ -86,9 +83,11 @@ export default {
       });
     },
     updateVideoLike(id, isLike) {
+      console.log(this.video);
+      console.log(isLike);
       this.$post("/video/update-like", { id: id, like: isLike }).then((res) => {
         if (res) {
-          this.getVideoList();
+          this.video.like = isLike;
         }
       });
     },

@@ -32,16 +32,18 @@
                   @click="
                     updateVideoLike(
                       index,
-                      playerOptions.id,
-                      !playerOptions.like
+                      videoArr[index].id,
+                      !videoArr[index].like
                     )
                   "
                 >
-                  <v-icon :color="playerOptions.like ? 'pink' : ''">
-                    {{ playerOptions.like ? "mdi-heart" : "mdi-heart-outline" }}
+                  <v-icon :color="videoArr[index].like ? 'pink' : ''">
+                    {{
+                      videoArr[index].like ? "mdi-heart" : "mdi-heart-outline"
+                    }}
                   </v-icon>
                 </v-btn>
-                <v-btn fab x-small @click="playVideo(playerOptions.id)">
+                <v-btn fab x-small @click="playVideo(videoArr[index].id)">
                   <v-icon>mdi-television</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -73,6 +75,7 @@ export default {
 
   data: () => ({
     screenSize: null,
+    videoArr: [],
     playerOptionsArr: [],
     playerOptionsTemplate: {
       controls: true,
@@ -88,30 +91,26 @@ export default {
           src: "",
         },
       ],
-      controlBar: {
-        remainingTimeDisplay: true,
-      },
+      controlBar: { remainingTimeDisplay: true },
     },
   }),
 
   methods: {
     getVideoList() {
-      this.videoList = [];
       this.playerOptionsArr = [];
       this.$get("/video/list").then((res) => {
-        this.videoList = res;
         let playerOptionsId = [];
         // 随机排列对象数组
-        for (var i = this.videoList.length - 1; i >= 0; i--) {
+        for (var i = res.length - 1; i >= 0; i--) {
           var randomIndex = Math.floor(Math.random() * (i + 1));
-          var itemAtIndex = this.videoList[randomIndex];
-          this.videoList[randomIndex] = this.videoList[i];
-          this.videoList[i] = itemAtIndex;
+          var itemAtIndex = res[randomIndex];
+          res[randomIndex] = res[i];
+          res[i] = itemAtIndex;
         }
-        for (let i = 0; i < this.videoList.length; i++) {
+        for (let i = 0; i < res.length; i++) {
           // 避免出现重复的视频
-          if (playerOptionsId.indexOf(this.videoList[i].id) == -1) {
-            playerOptionsId.push(this.videoList[i].id);
+          if (playerOptionsId.indexOf(res[i].id) == -1) {
+            playerOptionsId.push(res[i].id);
             // 屏幕大小
             let screenSize = this.$vuetify.breakpoint.name;
             // 如果是最小屏
@@ -122,12 +121,14 @@ export default {
             let playerOptions = JSON.parse(
               JSON.stringify(this.playerOptionsTemplate)
             );
-            playerOptions.id = this.videoList[i].id;
-            playerOptions.sources = "video/" + this.videoList[i].format;
-            playerOptions.sources =
-              "http://127.0.0.1:8090/data/" + this.videoList[i].name;
-            playerOptions.like = this.videoList[i].like;
+            playerOptions.sources = "video/" + res[i].format;
+            playerOptions.sources = "http://127.0.0.1:8090/data/" + res[i].name;
             this.playerOptionsArr.push(playerOptions);
+            let video = {
+              id: res[i].id,
+              like: res[i].like,
+            };
+            this.videoArr.push(video);
             // 如果视频数量达到4个就退出循环
             if (this.playerOptionsArr.length == 4) {
               break;
@@ -139,7 +140,7 @@ export default {
     updateVideoLike(index, id, isLike) {
       this.$post("/video/update-like", { id: id, like: isLike }).then((res) => {
         if (res) {
-          this.playerOptionsArr[index].like = isLike;
+          this.videoArr[index].like = isLike;
         }
       });
     },
