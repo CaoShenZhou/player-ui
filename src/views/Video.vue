@@ -4,12 +4,12 @@
       <v-card-title>
         视频ID：{{ id }}
         <v-spacer></v-spacer>
-          <v-icon
-            :color="video.like ? 'pink' : ''"
-            @click="updateVideoLike(video.id, !video.like)"
-          >
-            {{ video.like ? "mdi-heart" : "mdi-heart-outline" }}
-          </v-icon>
+        <v-icon
+          :color="video.like ? 'pink' : ''"
+          @click="updateVideoLike(video.id, !video.like)"
+        >
+          {{ video.like ? "mdi-heart" : "mdi-heart-outline" }}
+        </v-icon>
       </v-card-title>
       <!-- 分割线 -->
       <v-divider></v-divider>

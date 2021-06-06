@@ -38,4 +38,12 @@ const router = new VueRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    // 修改页面标题
+    document.title = to.meta.title;
+  }
+  next();
+});
+
 export default router;
