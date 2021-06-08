@@ -1,10 +1,11 @@
 import Vue from "vue";
-import App from "./App.vue";
+import App from "@/App.vue";
 import "@mdi/font/css/materialdesignicons.css";
-import router from "./router";
-import vuetify from "./plugins/vuetify";
-import { get, post, patch, put, del } from "./util/htttp";
-import snackbar from "./components/Snackbar/";
+import router from "@/router";
+import vuetify from "@/plugins/vuetify";
+import { get, post, patch, put, del } from "@/util/htttp";
+import snackbar from "@/components/Snackbar/";
+import common from "@/util/common";
 
 Vue.config.productionTip = false;
 Vue.prototype.$post = post;
@@ -13,6 +14,7 @@ Vue.prototype.$patch = patch;
 Vue.prototype.$put = put;
 Vue.prototype.$del = del;
 Vue.prototype.$snackbar = snackbar;
+Vue.prototype.$common = common;
 
 new Vue({
   router,

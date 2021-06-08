@@ -19,8 +19,27 @@
           ref="videoPlayer"
           :playsinline="true"
           :options="playerOptions"
-        ></video-player
-      ></v-card-text>
+        ></video-player>
+        <v-chip
+          v-for="item in selectedLabel"
+          :key="item.id"
+          class="mt-4 mb-4 mr-4"
+          color="green"
+          text-color="white"
+        >
+          {{ item.name }}
+          <v-icon right>mdi-minus-circle</v-icon>
+        </v-chip>
+        <v-divider></v-divider>
+        <v-chip
+          v-for="item in unselectedLabel"
+          :key="item.id"
+          class="mt-4 mb-4 mr-4"
+        >
+          {{ item.name }}
+          <v-icon right>mdi-plus-circle</v-icon>
+        </v-chip>
+      </v-card-text>
     </v-card>
   </div>
 </template>
@@ -43,6 +62,8 @@ export default {
     id: "",
     screenSize: null,
     video: {},
+    selectedLabel: [],
+    unselectedLabel: [],
     playerOptions: {
       controls: true,
       autoplay: true,
@@ -74,12 +95,22 @@ export default {
   methods: {
     getVideoById(id) {
       this.$get("/video/" + id).then((res) => {
-        if (res != null) {
-          this.video = res;
-          this.playerOptions.sources = "video/" + this.video.format;
-          this.playerOptions.sources =
-            "http://127.0.0.1:8090/data/" + this.video.name;
-        }
+        this.video = res.video;
+        this.playerOptions.sources = "video/" + this.video.format;
+        this.playerOptions.sources =
+          "http://127.0.0.1:8090/data/" + this.video.name;
+        // 已选中标签
+        res.labelList.forEach((label) => {
+          res.videoLabelList.forEach((videoLable) => {
+            if (label.id == videoLable.labelId) this.selectedLabel.push(label);
+          });
+        });
+        // 未选择标签
+        this.unselectedLabel = this.selectedLabel
+          .concat(res.labelList)
+          .filter(function (v, i, arr) {
+            return arr.indexOf(v) === arr.lastIndexOf(v);
+          });
       });
     },
     updateVideoLike(id, isLike) {

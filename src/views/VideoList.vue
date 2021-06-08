@@ -36,6 +36,12 @@
         :items="videoList"
         :search="search"
       >
+        <template v-slot:item.size="{ item }">
+            {{ $common.bytesToSize(item.size) }}
+        </template>
+        <template v-slot:item.duration="{ item }">
+            {{ $common.formatSecond(item.duration) }}
+        </template>
         <template v-slot:item.like="{ item }">
           <v-icon
             :color="item.like ? 'pink' : ''"
