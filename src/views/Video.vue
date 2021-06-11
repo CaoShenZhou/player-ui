@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        视频ID：{{ id }}
+        视频ID：{{ video.id }}
         <v-spacer></v-spacer>
         <v-icon
           :color="video.like ? 'pink' : ''"
@@ -20,6 +20,7 @@
           :playsinline="true"
           :options="playerOptions"
         ></video-player>
+        <!-- 已选中表标签 -->
         <v-chip
           v-for="item in selectedLabel"
           :key="item.id"
@@ -28,16 +29,21 @@
           text-color="white"
         >
           {{ item.name }}
-          <v-icon right>mdi-minus-circle</v-icon>
+          <v-icon right @click="delVideoLabel(video.id, item.id)">
+            mdi-minus-circle
+          </v-icon>
         </v-chip>
         <v-divider></v-divider>
+        <!-- 未选中标签 -->
         <v-chip
           v-for="item in unselectedLabel"
           :key="item.id"
           class="mt-4 mb-4 mr-4"
         >
           {{ item.name }}
-          <v-icon right>mdi-plus-circle</v-icon>
+          <v-icon right @click="addVideoLabel(video.id, item.id)">
+            mdi-plus-circle
+          </v-icon>
         </v-chip>
       </v-card-text>
     </v-card>
@@ -59,8 +65,6 @@ export default {
   },
 
   data: () => ({
-    id: "",
-    screenSize: null,
     video: {},
     selectedLabel: [],
     unselectedLabel: [],
@@ -99,34 +103,60 @@ export default {
         this.playerOptions.sources = "video/" + this.video.format;
         this.playerOptions.sources =
           "http://127.0.0.1:8090/data/" + this.video.name;
-        // 已选中标签
-        res.labelList.forEach((label) => {
+        this.unselectedLabel = res.labelList;
+        // 遍历全部标签
+        for (let i = this.unselectedLabel.length - 1; i != -1; i--) {
+          console.log(this.unselectedLabel[i]);
           res.videoLabelList.forEach((videoLable) => {
-            if (label.id == videoLable.labelId) this.selectedLabel.push(label);
+            if (this.unselectedLabel[i].id == videoLable.labelId) {
+              console.log(111);
+              this.selectedLabel.push(this.unselectedLabel[i]);
+              this.$delete(this.unselectedLabel, i);
+            }
           });
-        });
-        // 未选择标签
-        this.unselectedLabel = this.selectedLabel
-          .concat(res.labelList)
-          .filter(function (v, i, arr) {
-            return arr.indexOf(v) === arr.lastIndexOf(v);
-          });
+        }
+        console.log(this.selectedLabel, this.unselectedLabel);
       });
     },
-    updateVideoLike(id, isLike) {
-      console.log(this.video);
-      console.log(isLike);
-      this.$post("/video/update-like", { id: id, like: isLike }).then((res) => {
+    // 添加视频标签
+    addVideoLabel(videoId, labelId) {
+      this.$post("/video-label/add", {
+        videoId: videoId,
+        labelId: labelId,
+      }).then((res) => {
         if (res) {
-          this.video.like = isLike;
+          // 未选中标签的下标
+          let index = this.unselectedLabel.findIndex(
+            (videoLabel) => videoLabel.id === labelId
+          );
+          let tempLabel = this.unselectedLabel[index];
+          this.$delete(this.unselectedLabel, index);
+          this.selectedLabel.push(tempLabel);
+        }
+      });
+    },
+    // 删除视频标签
+    delVideoLabel(videoId, labelId) {
+      this.$post("/video-label/del", {
+        videoId: videoId,
+        labelId: labelId,
+      }).then((res) => {
+        if (res) {
+          // 已选中标签的下标
+          let index = this.selectedLabel.findIndex(
+            (videoLabel) => videoLabel.id === labelId
+          );
+          let tempLabel = this.selectedLabel[index];
+          this.$delete(this.selectedLabel, index);
+          this.unselectedLabel.push(tempLabel);
         }
       });
     },
   },
 
   created() {
-    this.id = this.$route.params.id;
-    this.getVideoById(this.$route.params.id);
+    this.video.id = this.$route.params.id;
+    this.getVideoById(this.video.id);
   },
 };
 </script>
