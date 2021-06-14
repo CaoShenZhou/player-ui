@@ -118,6 +118,14 @@ export default {
         console.log(this.selectedLabel, this.unselectedLabel);
       });
     },
+    // 更新视频喜欢
+    updateVideoLike(id, isLike) {
+      this.$post("/video/update-like", { id: id, like: isLike }).then((res) => {
+        if (res) {
+          this.video.like = isLike;
+        }
+      });
+    },
     // 添加视频标签
     addVideoLabel(videoId, labelId) {
       this.$post("/video-label/add", {
@@ -153,7 +161,6 @@ export default {
       });
     },
   },
-
   created() {
     this.video.id = this.$route.params.id;
     this.getVideoById(this.video.id);

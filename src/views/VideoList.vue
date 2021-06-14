@@ -13,6 +13,7 @@
         label="添加路径"
         single-line
         hide-details
+        clearable
         class="mx-4"
       >
         <template v-slot:append-outer>
@@ -24,6 +25,7 @@
         label="搜索"
         single-line
         hide-details
+        clearable
         class="mx-4"
       >
         <template v-slot:append-outer>
@@ -37,10 +39,10 @@
         :search="search"
       >
         <template v-slot:item.size="{ item }">
-            {{ $common.bytesToSize(item.size) }}
+          {{ $common.bytesToSize(item.size) }}
         </template>
         <template v-slot:item.duration="{ item }">
-            {{ $common.formatSecond(item.duration) }}
+          {{ $common.formatSecond(item.duration) }}
         </template>
         <template v-slot:item.like="{ item }">
           <v-icon
@@ -54,7 +56,9 @@
           <v-icon class="mr-2" @click="playVideo(item.id)">
             mdi-play-circle-outline
           </v-icon>
-          <v-icon @click="deleteItem(item)">mdi-delete-circle-outline</v-icon>
+          <v-icon @click="delVideo(item.id)">
+            mdi-delete-circle-outline
+          </v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -102,6 +106,13 @@ export default {
     },
     updateVideoLike(id, isLike) {
       this.$post("/video/update-like", { id: id, like: isLike }).then((res) => {
+        if (res) {
+          this.getVideoList();
+        }
+      });
+    },
+    delVideo(id) {
+      this.$del("/video/" + id).then((res) => {
         if (res) {
           this.getVideoList();
         }
