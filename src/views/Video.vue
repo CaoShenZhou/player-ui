@@ -15,6 +15,7 @@
       <v-divider></v-divider>
       <v-card-text>
         <video-player
+          style="width:60%"
           class="vjs-custom-skin"
           ref="videoPlayer"
           :playsinline="true"
@@ -71,7 +72,7 @@ export default {
     playerOptions: {
       controls: true,
       autoplay: true,
-      muted: true,
+      muted: false,
       aspectRatio: "16:9",
       language: "zh-CN",
       playbackRates: [0.7, 1.0, 1.5, 2.0],
@@ -98,11 +99,14 @@ export default {
 
   methods: {
     getVideoById(id) {
+        // this.video.sources =
+        //   "http://127.0.0.1:8090/video/" + id;
       this.$get("/video/" + id).then((res) => {
         this.video = res.video;
         this.playerOptions.sources = "video/" + this.video.format;
         this.playerOptions.sources =
-          "http://127.0.0.1:8090/data/" + this.video.name;
+        "http://127.0.0.1:8090/data/" + this.video.name;
+
         this.unselectedLabel = res.labelList;
         // 遍历全部标签
         for (let i = this.unselectedLabel.length - 1; i != -1; i--) {
@@ -116,6 +120,7 @@ export default {
           });
         }
         console.log(this.selectedLabel, this.unselectedLabel);
+        console.log(this.video.sources)
       });
     },
     // 更新视频喜欢

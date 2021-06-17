@@ -123,6 +123,7 @@ export default {
             );
             playerOptions.sources = "video/" + res[i].format;
             playerOptions.sources = "http://127.0.0.1:8090/data/" + res[i].name;
+            // playerOptions.sources = "http://127.0.0.1:8090/video/"+ res[i].id;
             this.playerOptionsArr.push(playerOptions);
             let video = {
               id: res[i].id,

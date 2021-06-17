@@ -2,10 +2,11 @@ import axios from "axios";
 import snackbar from "../components/Snackbar";
 
 axios.defaults.timeout = 10 * 1000;
-axios.defaults.baseURL = "http://localhost:8090/";
+axios.defaults.baseURL = "http://192.168.1.27:8090/";
 
 axios.interceptors.response.use(
   (response) => {
+    console.log(response);
     const data = response.data;
     switch (data.statusCode) {
       case 3018:

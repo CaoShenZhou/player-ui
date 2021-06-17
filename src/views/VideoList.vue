@@ -119,9 +119,10 @@ export default {
       });
     },
     playVideo(id) {
-      this.$router.push({
+      let routeUrl = this.$router.resolve({
         path: `/video/${id}`,
       });
+      window.open(routeUrl.href, "_blank");
     },
   },
 };
