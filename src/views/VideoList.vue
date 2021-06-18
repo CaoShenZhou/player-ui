@@ -56,12 +56,28 @@
           <v-icon class="mr-2" @click="playVideo(item.id)">
             mdi-play-circle-outline
           </v-icon>
-          <v-icon @click="delVideo(item.id)">
+          <v-icon
+            @click="
+              videoId = item.id;
+              delVideoDialog = true;
+            "
+          >
             mdi-delete-circle-outline
           </v-icon>
         </template>
       </v-data-table>
     </v-card>
+    <v-dialog v-model="delVideoDialog" max-width="250">
+      <v-card class="mx-auto">
+        <v-card-title>确定删除视频?</v-card-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="delVideoDialog = false">取消</v-btn>
+          <v-btn color="error" @click="delVideo()">确定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -69,6 +85,8 @@
 export default {
   name: "VideoList",
   data: () => ({
+    videoId: null,
+    delVideoDialog: false,
     path: "",
     loading: false,
     search: "",
@@ -111,10 +129,11 @@ export default {
         }
       });
     },
-    delVideo(id) {
-      this.$del("/video/" + id).then((res) => {
+    delVideo() {
+      this.$del("/video/" + this.videoId).then((res) => {
         if (res) {
           this.getVideoList();
+          this.delVideoDialog = false;
         }
       });
     },

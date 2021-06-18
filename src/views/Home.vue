@@ -18,12 +18,7 @@
             :key="playerOptions.id"
           >
             <v-card>
-              <video-player
-                class="vjs-custom-skin"
-                ref="videoPlayer"
-                :playsinline="true"
-                :options="playerOptions"
-              ></video-player>
+              
               <v-card-actions>
                 <v-btn
                   class="mr-2"
@@ -56,18 +51,10 @@
 </template>
 
 <script>
-window.videojs = require("video.js");
-require("video.js/dist/lang/zh-CN");
-require("vue-video-player/src/custom-theme.css");
-require("video.js/dist/video-js.css");
-import { videoPlayer } from "vue-video-player";
-
 export default {
   name: "Home",
 
-  components: {
-    videoPlayer,
-  },
+  components: {},
 
   created() {
     this.getVideoList();

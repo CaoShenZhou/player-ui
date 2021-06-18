@@ -37,3 +37,12 @@ export default {
   }),
 };
 </script>
+
+<style>
+.v-dialog > .v-card > .v-card__title {
+  padding: 16px 24px !important;
+}
+.v-dialog > .v-card > .v-card__actions {
+  padding: 8px 24px !important;
+}
+</style>

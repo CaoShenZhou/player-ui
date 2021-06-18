@@ -14,13 +14,7 @@
       <!-- 分割线 -->
       <v-divider></v-divider>
       <v-card-text>
-        <video-player
-          style="width:60%"
-          class="vjs-custom-skin"
-          ref="videoPlayer"
-          :playsinline="true"
-          :options="playerOptions"
-        ></video-player>
+        <div id="dplayer"></div>
         <!-- 已选中表标签 -->
         <v-chip
           v-for="item in selectedLabel"
@@ -36,11 +30,7 @@
         </v-chip>
         <v-divider></v-divider>
         <!-- 未选中标签 -->
-        <v-chip
-          v-for="item in unselectedLabel"
-          :key="item.id"
-          class="mt-4 mb-4 mr-4"
-        >
+        <v-chip v-for="item in unselectedLabel" :key="item.id" class="mt-4 mb-4 mr-4">
           {{ item.name }}
           <v-icon right @click="addVideoLabel(video.id, item.id)">
             mdi-plus-circle
@@ -52,41 +42,18 @@
 </template>
 
 <script>
-window.videojs = require("video.js");
-require("video.js/dist/lang/zh-CN");
-require("vue-video-player/src/custom-theme.css");
-require("video.js/dist/video-js.css");
-import { videoPlayer } from "vue-video-player";
+import DPlayer from "dplayer";
+import "vue-dplayer/dist/vue-dplayer.css";
 
 export default {
   name: "Video",
 
-  components: {
-    videoPlayer,
-  },
+  components: {},
 
   data: () => ({
     video: {},
     selectedLabel: [],
     unselectedLabel: [],
-    playerOptions: {
-      controls: true,
-      autoplay: true,
-      muted: false,
-      aspectRatio: "16:9",
-      language: "zh-CN",
-      playbackRates: [0.7, 1.0, 1.5, 2.0],
-      notSupportedMessage: "此视频暂无法播放，请稍后再试",
-      sources: [
-        {
-          type: "",
-          src: "",
-        },
-      ],
-      controlBar: {
-        remainingTimeDisplay: true,
-      },
-    },
   }),
 
   watch: {
@@ -99,28 +66,34 @@ export default {
 
   methods: {
     getVideoById(id) {
-        // this.video.sources =
-        //   "http://127.0.0.1:8090/video/" + id;
       this.$get("/video/" + id).then((res) => {
         this.video = res.video;
-        this.playerOptions.sources = "video/" + this.video.format;
-        this.playerOptions.sources =
-        "http://127.0.0.1:8090/data/" + this.video.name;
-
+        new DPlayer({
+          container: document.getElementById("dplayer"),
+          lang: "zh-cn",
+          screenshot: true,
+          volume: 0.5,
+          playbackSpeed: [0.5, 0.75, 1, 1.25, 1.75],
+          video: {
+            url: "http://192.168.1.27:8090/data/" + this.video.name,
+          },
+        });
+        // 等播放器渲染完毕后更改循环播放的文字
+        this.$nextTick(function () {
+          let div = document.getElementsByClassName("dplayer-label");
+          console.log((div[1].innerText = "循环播放"));
+        });
         this.unselectedLabel = res.labelList;
         // 遍历全部标签
         for (let i = this.unselectedLabel.length - 1; i != -1; i--) {
           console.log(this.unselectedLabel[i]);
           res.videoLabelList.forEach((videoLable) => {
             if (this.unselectedLabel[i].id == videoLable.labelId) {
-              console.log(111);
               this.selectedLabel.push(this.unselectedLabel[i]);
               this.$delete(this.unselectedLabel, i);
             }
           });
         }
-        console.log(this.selectedLabel, this.unselectedLabel);
-        console.log(this.video.sources)
       });
     },
     // 更新视频喜欢
@@ -173,4 +146,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.dplayer-controller
+  .dplayer-icons
+  .dplayer-setting
+  .dplayer-setting-box.dplayer-setting-box-narrow {
+  height: unset;
+}
+.dplayer-controller .dplayer-bar-wrap .dplayer-bar-time {
+  width: unset;
+}
+</style>
