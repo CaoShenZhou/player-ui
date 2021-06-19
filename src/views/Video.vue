@@ -15,32 +15,27 @@
       <v-divider></v-divider>
       <v-card-text>
         <v-row>
-          <v-col cols="10">
+          <v-col cols="12" xl="10" lg="10">
             <player :videoUrl="video.url" :videoId="video.id"></player>
           </v-col>
-          <v-col cols="2" class="overflow-y-auto" style="max-height: 609px">
-            <v-row>
-              <v-col>
-                <v-row>
-                  <v-col v-for="n in 10" :key="n" cols="12">
-                    <v-card class="rounded-0">
-                      <v-img
-                        class="white--text align-end"
-                        height="135px"
-                        src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                      >
-                        <v-card-title>视频{{ n }}</v-card-title>
-                      </v-img>
-                      <v-card-actions>
-                        <v-btn small text>
-                          <v-icon>mdi-play-circle-outline</v-icon>
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
+          <v-col cols="12" xl="2" lg="2">
+            视频列表
+            <div class="overflow-y-auto" style="max-height: 500px">
+              <div v-for="n in 10" :key="n" class="pb-4">
+                <v-card outlined rounded="0" hover>
+                  <v-img
+                    class="white--text align-end"
+                    height="150px"
+                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                  >
+                    <v-card-title>视频{{ n }}</v-card-title>
+                  </v-img>
+                  <v-card-actions>
+                    <v-btn small color="primary" text>播放</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </div>
+            </div>
           </v-col>
         </v-row>
         <!-- 已选中表标签 -->

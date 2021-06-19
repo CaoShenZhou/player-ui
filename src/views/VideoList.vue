@@ -99,7 +99,7 @@ export default {
       },
       { text: "名称", value: "name" },
       { text: "是否喜欢", value: "like" },
-      { text: "MD5", sortable: false, value: "md5" },
+      // { text: "MD5", sortable: false, value: "md5" },
       { text: "格式", value: "format" },
       { text: "大小", value: "size" },
       { text: "时长", value: "duration" },
