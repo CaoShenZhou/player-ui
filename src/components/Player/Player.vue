@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="dplayer"></div>
+    <div style="height: 585px" :id="videoId"></div>
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import "vue-dplayer/dist/vue-dplayer.css";
 
 export default {
   props: {
+    videoId: String,
     videoUrl: String,
   },
 
@@ -33,8 +34,9 @@ export default {
   methods: {
     // 创建播放器
     createPlayer() {
+      console.log(this.videoId, this.videoUrl);
       this.dp = new DPlayer({
-        container: document.getElementById("dplayer"),
+        container: document.getElementById(this.videoId),
         lang: "zh-cn",
         screenshot: true,
         mutex: false,

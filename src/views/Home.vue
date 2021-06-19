@@ -14,11 +14,11 @@
             md="6"
             lg="6"
             xl="6"
-            v-for="(playerOptions, index) in playerOptionsArr"
-            :key="playerOptions.id"
+            v-for="(video, index) in videoArr"
+            :key="video.id"
           >
             <v-card>
-              
+              <player :videoUrl="video.url" :videoId="video.id"></player>
               <v-card-actions>
                 <v-btn
                   class="mr-2"
@@ -54,74 +54,25 @@
 export default {
   name: "Home",
 
-  components: {},
+  components: {
+    Player: () => import("@/components/Player/Player.vue"),
+  },
 
   created() {
     this.getVideoList();
   },
 
   data: () => ({
-    screenSize: null,
     videoArr: [],
-    playerOptionsArr: [],
-    playerOptionsTemplate: {
-      controls: true,
-      autoplay: true,
-      muted: true,
-      aspectRatio: "16:9",
-      language: "zh-CN",
-      playbackRates: [0.7, 1.0, 1.5, 2.0],
-      notSupportedMessage: "此视频暂无法播放，请稍后再试",
-      sources: [
-        {
-          type: "",
-          src: "",
-        },
-      ],
-      controlBar: { remainingTimeDisplay: true },
-    },
   }),
 
   methods: {
     getVideoList() {
-      this.playerOptionsArr = [];
       this.$get("/video/list").then((res) => {
-        let playerOptionsId = [];
-        // 随机排列对象数组
-        for (var i = res.length - 1; i >= 0; i--) {
-          var randomIndex = Math.floor(Math.random() * (i + 1));
-          var itemAtIndex = res[randomIndex];
-          res[randomIndex] = res[i];
-          res[i] = itemAtIndex;
-        }
-        for (let i = 0; i < res.length; i++) {
-          // 避免出现重复的视频
-          if (playerOptionsId.indexOf(res[i].id) == -1) {
-            playerOptionsId.push(res[i].id);
-            // 屏幕大小
-            let screenSize = this.$vuetify.breakpoint.name;
-            // 如果是最小屏
-            if (screenSize == "xs") {
-              // 将播放器控制栏取消
-              this.playerOptionsTemplate.controls = false;
-            }
-            let playerOptions = JSON.parse(
-              JSON.stringify(this.playerOptionsTemplate)
-            );
-            playerOptions.sources = "video/" + res[i].format;
-            playerOptions.sources = "http://127.0.0.1:8090/data/" + res[i].name;
-            // playerOptions.sources = "http://127.0.0.1:8090/video/"+ res[i].id;
-            this.playerOptionsArr.push(playerOptions);
-            let video = {
-              id: res[i].id,
-              like: res[i].like,
-            };
-            this.videoArr.push(video);
-            // 如果视频数量达到4个就退出循环
-            if (this.playerOptionsArr.length == 4) {
-              break;
-            }
-          }
+        for (let i = 0; i < 4; i++) {
+          let video = res[i];
+          video.url = "http://192.168.1.27:8090/data/" + video.name;
+          this.videoArr.push(res[i]);
         }
       });
     },
@@ -133,9 +84,10 @@ export default {
       });
     },
     playVideo(id) {
-      this.$router.push({
+      let routeUrl = this.$router.resolve({
         path: `/video/${id}`,
       });
+      window.open(routeUrl.href, "_blank");
     },
   },
 };
