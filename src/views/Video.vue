@@ -14,7 +14,13 @@
       <!-- 分割线 -->
       <v-divider></v-divider>
       <v-card-text>
-        <div id="dplayer"></div>
+        <v-row>
+          <v-col cols="6">
+            <player :videoUrl="video.url"></player>
+          </v-col>
+          <v-col cols="6">
+          </v-col>
+        </v-row>
         <!-- 已选中表标签 -->
         <v-chip
           v-for="item in selectedLabel"
@@ -30,7 +36,11 @@
         </v-chip>
         <v-divider></v-divider>
         <!-- 未选中标签 -->
-        <v-chip v-for="item in unselectedLabel" :key="item.id" class="mt-4 mb-4 mr-4">
+        <v-chip
+          v-for="item in unselectedLabel"
+          :key="item.id"
+          class="mt-4 mb-4 mr-4"
+        >
           {{ item.name }}
           <v-icon right @click="addVideoLabel(video.id, item.id)">
             mdi-plus-circle
@@ -42,13 +52,12 @@
 </template>
 
 <script>
-import DPlayer from "dplayer";
-import "vue-dplayer/dist/vue-dplayer.css";
-
 export default {
   name: "Video",
 
-  components: {},
+  components: {
+    Player: () => import("@/components/Player/Player.vue"),
+  },
 
   data: () => ({
     video: {},
@@ -68,21 +77,7 @@ export default {
     getVideoById(id) {
       this.$get("/video/" + id).then((res) => {
         this.video = res.video;
-        new DPlayer({
-          container: document.getElementById("dplayer"),
-          lang: "zh-cn",
-          screenshot: true,
-          volume: 0.5,
-          playbackSpeed: [0.5, 0.75, 1, 1.25, 1.75],
-          video: {
-            url: "http://192.168.1.27:8090/data/" + this.video.name,
-          },
-        });
-        // 等播放器渲染完毕后更改循环播放的文字
-        this.$nextTick(function () {
-          let div = document.getElementsByClassName("dplayer-label");
-          console.log((div[1].innerText = "循环播放"));
-        });
+        this.video.url = "http://192.168.1.27:8090/data/" + this.video.name;
         this.unselectedLabel = res.labelList;
         // 遍历全部标签
         for (let i = this.unselectedLabel.length - 1; i != -1; i--) {
@@ -145,15 +140,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.dplayer-controller
-  .dplayer-icons
-  .dplayer-setting
-  .dplayer-setting-box.dplayer-setting-box-narrow {
-  height: unset;
-}
-.dplayer-controller .dplayer-bar-wrap .dplayer-bar-time {
-  width: unset;
-}
-</style>
