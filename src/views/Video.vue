@@ -19,13 +19,16 @@
             <player :videoUrl="video.url" :videoId="video.id"></player>
           </v-col>
           <v-col cols="12" xl="2" lg="2">
-            视频列表
-            <div class="overflow-y-auto" style="max-height: 500px">
-              <div v-for="n in 10" :key="n" class="pb-4">
+            <v-tabs class="mb-3">
+              <v-tab>播放列表</v-tab>
+              <v-tab>喜欢列表</v-tab>
+            </v-tabs>
+            <div class="overflow-y-auto" style="max-height: 525px">
+              <div v-for="n in 10" :key="n" class="pb-3">
                 <v-card outlined rounded="0" hover>
                   <v-img
                     class="white--text align-end"
-                    height="150px"
+                    height="117px"
                     src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
                   >
                     <v-card-title>视频{{ n }}</v-card-title>
