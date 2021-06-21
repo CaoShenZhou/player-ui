@@ -23,7 +23,7 @@
               <v-tab>播放列表</v-tab>
               <v-tab>喜欢列表</v-tab>
             </v-tabs>
-            <div class="overflow-y-auto" style="max-height: 525px">
+            <vue-custom-scrollbar :settings="settings" style="height: 525px">
               <div v-for="n in 10" :key="n" class="pb-3">
                 <v-card outlined rounded="0" hover>
                   <v-img
@@ -38,7 +38,7 @@
                   </v-card-actions>
                 </v-card>
               </div>
-            </div>
+            </vue-custom-scrollbar>
           </v-col>
         </v-row>
         <!-- 已选中表标签 -->
@@ -72,14 +72,20 @@
 </template>
 
 <script>
+import vueCustomScrollbar from "vue-custom-scrollbar";
+import "vue-custom-scrollbar/dist/vueScrollbar.css";
 export default {
   name: "Video",
 
   components: {
+    vueCustomScrollbar,
     Player: () => import("@/components/Player/Player.vue"),
   },
 
   data: () => ({
+    settings: {
+      wheelPropagation: false,
+    },
     video: {},
     selectedLabel: [],
     unselectedLabel: [],
