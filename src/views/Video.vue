@@ -19,26 +19,66 @@
             <player :videoUrl="video.url" :videoId="video.id"></player>
           </v-col>
           <v-col cols="12" xl="2" lg="2">
-            <v-tabs class="mb-3">
-              <v-tab>播放列表</v-tab>
+            <v-tabs fixed-tabs>
+              <v-tab>观看列表</v-tab>
               <v-tab>喜欢列表</v-tab>
+              <v-tab-item>
+                <vue-custom-scrollbar
+                  :settings="settings"
+                  style="height: 525px"
+                  class="my-3"
+                >
+                  <div v-for="v in watchList" :key="v.id" class="mx-3 mb-3">
+                    <v-hover>
+                      <template v-slot:default="{ hover }">
+                        <v-card
+                          outlined
+                          rounded="0"
+                          :elevation="hover ? 4 : 0"
+                        >
+                          <v-img
+                            class="white--text align-end"
+                            height="117px"
+                            :src="v.url"
+                          >
+                            <v-card-title>{{ v.name }}</v-card-title>
+                          </v-img>
+                          <v-card-actions>
+                            <v-btn small color="primary" text>播放</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-hover>
+                  </div>
+                </vue-custom-scrollbar>
+              </v-tab-item>
+              <v-tab-item>
+                <vue-custom-scrollbar
+                  :settings="settings"
+                  style="height: 525px"
+                  class="my-3"
+                >
+                  <div v-for="v in likeList" :key="v.id" class="mx-3 mb-3">
+                    <v-hover>
+                      <template v-slot:default="{ hover }">
+                        <v-card outlined rounded="0" :elevation="hover ? 4 : 0">
+                          <v-img
+                            class="white--text align-end"
+                            height="117px"
+                            :src="v.url"
+                          >
+                            <v-card-title>{{ v.name }}</v-card-title>
+                          </v-img>
+                          <v-card-actions>
+                            <v-btn small color="primary" text>播放</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-hover>
+                  </div>
+                </vue-custom-scrollbar>
+              </v-tab-item>
             </v-tabs>
-            <vue-custom-scrollbar :settings="settings" style="height: 525px">
-              <div v-for="n in 10" :key="n" class="pb-3">
-                <v-card outlined rounded="0" hover>
-                  <v-img
-                    class="white--text align-end"
-                    height="117px"
-                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                  >
-                    <v-card-title>视频{{ n }}</v-card-title>
-                  </v-img>
-                  <v-card-actions>
-                    <v-btn small color="primary" text>播放</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </div>
-            </vue-custom-scrollbar>
           </v-col>
         </v-row>
         <!-- 已选中表标签 -->
@@ -83,10 +123,13 @@ export default {
   },
 
   data: () => ({
+    tab: null,
     settings: {
       wheelPropagation: false,
     },
     video: {},
+    watchList: [],
+    likeList: [],
     selectedLabel: [],
     unselectedLabel: [],
   }),
@@ -97,6 +140,20 @@ export default {
       this.id = newVal;
       this.getVideoById(newVal);
     },
+  },
+
+  created() {
+    this.video.id = this.$route.params.id;
+    this.getVideoById(this.video.id);
+    for (let i = 0; i < 10; i++) {
+      let videoInfo = {
+        id: i + 1,
+        name: `视频${i + 1}`,
+        url: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
+      };
+      this.watchList.push(videoInfo);
+      this.likeList.push(videoInfo);
+    }
   },
 
   methods: {
@@ -159,10 +216,6 @@ export default {
         }
       });
     },
-  },
-  created() {
-    this.video.id = this.$route.params.id;
-    this.getVideoById(this.video.id);
   },
 };
 </script>
