@@ -22,7 +22,7 @@
             <v-tabs fixed-tabs>
               <v-tab>观看列表</v-tab>
               <v-tab>喜欢列表</v-tab>
-              <v-tab-item>
+              <v-tab-item style="height: 525px">
                 <vue-custom-scrollbar
                   :settings="settings"
                   style="height: 525px"
@@ -52,7 +52,7 @@
                   </div>
                 </vue-custom-scrollbar>
               </v-tab-item>
-              <v-tab-item>
+              <v-tab-item style="height: 525px">
                 <vue-custom-scrollbar
                   :settings="settings"
                   style="height: 525px"
