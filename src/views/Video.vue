@@ -31,17 +31,16 @@
                   <div v-for="v in watchList" :key="v.id" class="mx-3 mb-3">
                     <v-hover>
                       <template v-slot:default="{ hover }">
-                        <v-card
-                          outlined
-                          rounded="0"
-                          :elevation="hover ? 4 : 0"
-                        >
+                        <v-card outlined rounded="0" :elevation="hover ? 4 : 0">
                           <v-img
                             class="white--text align-end"
                             height="117px"
                             :src="v.url"
                           >
                             <v-card-title>{{ v.name }}</v-card-title>
+                            <v-card-subtitle class="white--text align-end">
+                              {{ v.duration }}
+                            </v-card-subtitle>
                           </v-img>
                           <v-card-actions>
                             <v-btn small color="primary" text>播放</v-btn>
@@ -68,6 +67,9 @@
                             :src="v.url"
                           >
                             <v-card-title>{{ v.name }}</v-card-title>
+                            <v-card-subtitle class="white--text align-end">
+                              {{ v.duration }}
+                            </v-card-subtitle>
                           </v-img>
                           <v-card-actions>
                             <v-btn small color="primary" text>播放</v-btn>
@@ -149,6 +151,7 @@ export default {
       let videoInfo = {
         id: i + 1,
         name: `视频${i + 1}`,
+        duration: "00:16:35",
         url: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
       };
       this.watchList.push(videoInfo);
