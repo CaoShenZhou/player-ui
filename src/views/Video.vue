@@ -163,7 +163,7 @@ export default {
     getVideoById(id) {
       this.$get("/video/" + id).then((res) => {
         this.video = res.video;
-        this.video.url = "http://192.168.1.27:8090/data/" + this.video.name;
+        this.video.url = "http:/127.0.0.1:8090/data/" + this.video.name;
         this.unselectedLabel = res.labelList;
         // 遍历全部标签
         for (let i = this.unselectedLabel.length - 1; i != -1; i--) {
