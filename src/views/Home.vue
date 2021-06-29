@@ -71,7 +71,7 @@ export default {
       this.$get("/video/list").then((res) => {
         for (let i = 0; i < 4; i++) {
           let video = res[i];
-          video.url = "http://192.168.1.27:8090/data/" + video.name;
+          video.url = "http://127.0.0.1:8090/data/" + video.name;
           this.videoArr.push(res[i]);
         }
       });
