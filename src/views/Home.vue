@@ -18,7 +18,7 @@
             :key="video.id"
           >
             <v-card>
-              <player :videoUrl="video.url" :videoId="video.id"></player>
+              <player :videoId="video.id" :videoUrl="video.url"></player>
               <v-card-actions>
                 <v-btn
                   class="mr-2"

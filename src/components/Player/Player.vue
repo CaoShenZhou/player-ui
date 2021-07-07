@@ -24,7 +24,7 @@ export default {
 
   watch: {
     videoUrl: function (newVal, oldVal) {
-      console.log(newVal, oldVal);
+      console.log("切换：", newVal, oldVal);
       // 切换视频
       this.dp.switchVideo({
         url: newVal,
@@ -34,7 +34,7 @@ export default {
   methods: {
     // 创建播放器
     createPlayer() {
-      console.log(this.videoId, this.videoUrl);
+      console.log("初始：", this.videoId, this.videoUrl);
       this.dp = new DPlayer({
         container: document.getElementById(this.videoId),
         lang: "zh-cn",
@@ -48,8 +48,8 @@ export default {
       });
       // 等播放器渲染完毕后更改循环播放的文字
       this.$nextTick(function () {
-        let div = document.getElementsByClassName("dplayer-label");
-        console.log((div[1].innerText = "循环播放"));
+        document.getElementsByClassName("dplayer-label")[1].innerText =
+          "循环播放";
       });
     },
   },

@@ -16,7 +16,7 @@
       <v-card-text>
         <v-row>
           <v-col cols="12" xl="10" lg="10">
-            <player :videoUrl="video.url" :videoId="video.id"></player>
+            <player :videoId="videoId" :videoUrl="videoUrl"></player>
           </v-col>
           <v-col cols="12" xl="2" lg="2">
             <v-tabs fixed-tabs>
@@ -129,7 +129,10 @@ export default {
     settings: {
       wheelPropagation: false,
     },
+    videoArr: [],
     video: {},
+    videoId: null,
+    videoUrl: null,
     watchList: [],
     likeList: [],
     selectedLabel: [],
@@ -145,8 +148,9 @@ export default {
   },
 
   created() {
-    this.video.id = this.$route.params.id;
-    this.getVideoById(this.video.id);
+    let id = this.$route.params.id;
+    this.getVideoById(id);
+
     for (let i = 0; i < 10; i++) {
       let videoInfo = {
         id: i + 1,
@@ -163,11 +167,11 @@ export default {
     getVideoById(id) {
       this.$get("/video/" + id).then((res) => {
         this.video = res.video;
-        this.video.url = "http:/127.0.0.1:8090/data/" + this.video.name;
+        this.videoId = this.video.id;
+        this.videoUrl = "http://127.0.0.1:8090/data/" + this.video.name;
         this.unselectedLabel = res.labelList;
         // 遍历全部标签
         for (let i = this.unselectedLabel.length - 1; i != -1; i--) {
-          console.log(this.unselectedLabel[i]);
           res.videoLabelList.forEach((videoLable) => {
             if (this.unselectedLabel[i].id == videoLable.labelId) {
               this.selectedLabel.push(this.unselectedLabel[i]);
