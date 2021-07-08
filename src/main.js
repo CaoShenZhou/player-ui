@@ -6,7 +6,7 @@ import vuetify from "@/plugins/vuetify";
 import { get, post, patch, put, del } from "@/util/htttp";
 import snackbar from "@/components/Snackbar/";
 import common from "@/util/common";
-import echarts from "echarts";
+import * as echarts from "echarts";
 import "echarts-liquidfill";
 
 Vue.config.productionTip = false;

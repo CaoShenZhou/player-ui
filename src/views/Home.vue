@@ -1,5 +1,8 @@
 <template>
   <div>
+    <v-col cols="12" xl="4" md="6" sm="12" style="height: 400px">
+      <VideoLabelCount></VideoLabelCount>
+    </v-col>
     <v-card>
       <v-card-title>
         多片同看
@@ -56,6 +59,8 @@ export default {
 
   components: {
     Player: () => import("@/components/Player/Player.vue"),
+    VideoLabelCount: () =>
+      import("@/components/VideoLabel/VideoLabelCount.vue"),
   },
 
   created() {
