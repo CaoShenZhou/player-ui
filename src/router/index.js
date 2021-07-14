@@ -16,6 +16,11 @@ const routes = [
     component: () => import("../views/VideoList.vue"),
   },
   {
+    path: "/video-label",
+    name: "VideoLabel",
+    component: () => import("../views/VideoLabel.vue"),
+  },
+  {
     path: "/setting",
     name: "Setting",
     component: () => import("../views/Setting.vue"),

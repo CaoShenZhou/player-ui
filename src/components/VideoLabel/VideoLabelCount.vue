@@ -1,15 +1,42 @@
 <template>
-  <div id="videoLabelChart" style="width: 100%; height: 100%"></div>
+  <div>
+    <v-card>
+      <v-card-title>视频标签统计</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12" xl="7" lg="7" style="height: 400px">
+            <div id="videoLabelChart" style="width: 100%; height: 100%"></div>
+          </v-col>
+          <v-col cols="12" xl="5" lg="5">
+            <v-simple-table fixed-header dense height="376px">
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">名称</th>
+                    <th class="text-left">标记数</th>
+                    <th class="text-left">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in videoLabelCount" :key="item.id">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.count }}</td>
+                    <td>操作</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <script>
 export default {
   data: () => ({
     videoLabelChartOption: {
-      title: {
-        text: "视频标签统计",
-        left: "center",
-      },
       tooltip: {
         trigger: "item",
       },
@@ -19,24 +46,13 @@ export default {
       },
       series: [
         {
-          name: "视频标签",
+          name: "视频标签统计",
           type: "pie",
-          radius: ["40%", "70%"],
+          radius: [30, 150],
+          center: ["50%", "50%"],
+          roseType: "area",
           itemStyle: {
-            borderRadius: 5,
-            borderColor: "#fff",
-            borderWidth: 1,
-          },
-          label: {
-            show: false,
-            position: "center",
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: "30",
-              fontWeight: "bold",
-            },
+            borderRadius: 8,
           },
           data: [],
         },
@@ -59,22 +75,29 @@ export default {
     getVideoLabelCount() {
       this.$get("/video-label/count").then((res) => {
         this.videoLabelCount = res;
+        res.forEach((element) => {
+          this.videoLabelChartOption.series[0].data.push({
+            name: element.name,
+            value: element.count,
+          });
+          this.draw();
+        });
       });
     },
   },
 
-  mounted() {
-    this.draw();
+  created() {
     this.getVideoLabelCount();
   },
 
+  mounted() {},
+
   watch: {
     videoLabelCount: {
-      handler(newVal) {
+      handler() {
         let videoLabelChart = this.$echarts.init(
           document.getElementById("videoLabelChart")
         );
-        this.videoLabelChartOption.series[0].data = newVal;
         videoLabelChart.setOption(this.videoLabelChartOption);
       },
       deep: true,

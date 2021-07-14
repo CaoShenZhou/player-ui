@@ -64,15 +64,19 @@
                           <v-img
                             class="white--text align-end"
                             height="117px"
-                            :src="v.url"
+                            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
                           >
-                            <v-card-title>{{ v.name }}</v-card-title>
+                            <v-card-title>{{ v.id }}</v-card-title>
                             <v-card-subtitle class="white--text align-end">
-                              {{ v.duration }}
+                              {{ $common.formatSecond(v.duration) }}
                             </v-card-subtitle>
                           </v-img>
                           <v-card-actions>
-                            <v-btn small color="primary" text>播放</v-btn>
+                            <v-btn small color="primary" text>
+                              <router-link :to="'/video/' + v.id">
+                                <button>播放</button>
+                              </router-link>
+                            </v-btn>
                           </v-card-actions>
                         </v-card>
                       </template>
@@ -159,8 +163,8 @@ export default {
         url: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
       };
       this.watchList.push(videoInfo);
-      this.likeList.push(videoInfo);
     }
+    this.getVideoLikeList();
   },
 
   methods: {
@@ -179,6 +183,13 @@ export default {
             }
           });
         }
+      });
+    },
+    // 获取视频喜欢列表
+    getVideoLikeList() {
+      this.$get("/video/like-list").then((res) => {
+        console.log(res);
+        this.likeList = res;
       });
     },
     // 更新视频喜欢
