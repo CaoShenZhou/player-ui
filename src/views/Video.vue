@@ -53,7 +53,6 @@
               </v-tab-item>
               <v-tab-item style="height: 525px">
                 <vue-custom-scrollbar
-                  :settings="settings"
                   style="height: 525px"
                   class="my-3"
                 >
@@ -130,9 +129,6 @@ export default {
 
   data: () => ({
     tab: null,
-    settings: {
-      wheelPropagation: false,
-    },
     videoArr: [],
     video: {},
     videoId: null,

@@ -1,14 +1,20 @@
 <template>
   <div>
     <v-card>
-      <v-card-title>视频标签统计</v-card-title>
+      <v-card-title>
+        视频标签统计
+        <v-spacer></v-spacer>
+        <v-icon color="green" @click="getVideoList()">mdi-cached</v-icon>
+      </v-card-title>
+      <!-- 分割线 -->
+      <v-divider></v-divider>
       <v-card-text>
         <v-row>
-          <v-col cols="12" xl="7" lg="7" style="height: 400px">
+          <v-col cols="12" xl="7" lg="7" style="height: 408px">
             <div id="videoLabelChart" style="width: 100%; height: 100%"></div>
           </v-col>
           <v-col cols="12" xl="5" lg="5">
-            <v-simple-table fixed-header dense height="376px">
+            <v-simple-table fixed-header dense height="384px">
               <template v-slot:default>
                 <thead>
                   <tr>
@@ -21,7 +27,7 @@
                   <tr v-for="item in videoLabelCount" :key="item.id">
                     <td>{{ item.name }}</td>
                     <td>{{ item.count }}</td>
-                    <td>操作</td>
+                    <td><a>操作</a></td>
                   </tr>
                 </tbody>
               </template>
@@ -35,14 +41,12 @@
 
 <script>
 export default {
+  name: "VideoLabelCount",
+
   data: () => ({
     videoLabelChartOption: {
       tooltip: {
         trigger: "item",
-      },
-      legend: {
-        orient: "vertical",
-        left: "0",
       },
       series: [
         {

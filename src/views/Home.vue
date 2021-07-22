@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12" xl="6" lg="6"><VideoLabelCount></VideoLabelCount></v-col>
+      <v-col cols="12" xl="6" lg="6">
+        <VideoLabelCount></VideoLabelCount>
+      </v-col>
     </v-row>
   </div>
 </template>
