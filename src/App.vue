@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app>
+    <v-app-bar app elevation="10">
       <v-tabs centered class="ml-n9">
         <v-tab v-for="nav in navLinks" :key="nav.url" :to="nav.url">
           {{ nav.title }}

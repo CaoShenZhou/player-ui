@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card>
+    <v-card elevation="10" class="rounded-lg">
       <v-card-title>
         视频ID：{{ video.id }}
         <v-spacer></v-spacer>
@@ -16,12 +16,44 @@
       <v-card-text>
         <v-row>
           <v-col cols="12" xl="10" lg="10">
-            <player :videoId="videoId" :videoUrl="videoUrl"></player>
+            <player
+              :playerHeight="'585px'"
+              :videoId="videoId"
+              :videoUrl="videoUrl"
+            ></player>
           </v-col>
           <v-col cols="12" xl="2" lg="2">
             <v-tabs fixed-tabs>
+              <v-tab>视频详情</v-tab>
               <v-tab>观看列表</v-tab>
               <v-tab>喜欢列表</v-tab>
+              <v-tab-item style="height: 525px">
+                <vue-custom-scrollbar
+                  :settings="settings"
+                  style="height: 525px"
+                  class="my-3"
+                >
+                  <v-card rounded="0" :elevation="hover ? 4 : 0">
+                    <v-card-title>视频名称</v-card-title>
+                    <v-card-text>
+                      <p>
+                        <b>视频大小：</b>
+                        {{ $common.bytesToSize(video.size) }}
+                      </p>
+                      <p>
+                        <b>视频时长：</b
+                        >{{ $common.formatSecond(video.duration) }}
+                      </p>
+                      <p><b>上传时间：</b>{{ video.createTime }}</p>
+                      <p><b>视频分辨率：</b>{{ video.resolution }}</p>
+                      <p>
+                        <b>视频描述：</b>
+                        fasffasfasfsafasasgfddhfdhfdhfdhfdhffasfasfas
+                      </p>
+                    </v-card-text>
+                  </v-card>
+                </vue-custom-scrollbar>
+              </v-tab-item>
               <v-tab-item style="height: 525px">
                 <vue-custom-scrollbar
                   :settings="settings"
@@ -53,6 +85,7 @@
               </v-tab-item>
               <v-tab-item style="height: 525px">
                 <vue-custom-scrollbar
+                  :settings="settings"
                   style="height: 525px"
                   class="my-3"
                 >
@@ -86,31 +119,52 @@
             </v-tabs>
           </v-col>
         </v-row>
-        <!-- 已选中表标签 -->
-        <v-chip
-          v-for="item in selectedLabel"
-          :key="item.id"
-          class="mt-4 mb-4 mr-4"
-          color="green"
-          text-color="white"
-        >
-          {{ item.name }}
-          <v-icon right @click="delVideoLabel(video.id, item.id)">
-            mdi-minus-circle
-          </v-icon>
-        </v-chip>
-        <v-divider></v-divider>
-        <!-- 未选中标签 -->
-        <v-chip
-          v-for="item in unselectedLabel"
-          :key="item.id"
-          class="mt-4 mb-4 mr-4"
-        >
-          {{ item.name }}
-          <v-icon right @click="addVideoLabel(video.id, item.id)">
-            mdi-plus-circle
-          </v-icon>
-        </v-chip>
+        <v-slide-group show-arrows>
+          <!-- 已选中表标签 -->
+          <v-chip
+            v-for="item in selectedLabel"
+            :key="item.id"
+            class="mt-4 mb-4 mr-2"
+            color="green"
+            text-color="white"
+            label
+          >
+            {{ item.name }}
+            <v-icon right @click="delVideoLabel(video.id, item.id)">
+              mdi-minus-circle
+            </v-icon>
+          </v-chip>
+        </v-slide-group>
+        <v-card>
+          <v-card-title>
+            <v-text-field
+              v-model="labelSearch"
+              label="添加视频标签"
+              single-line
+              hide-details
+              clearable
+            >
+              <template v-slot:append-outer>
+                <v-icon>mdi-magnify</v-icon>
+              </template>
+            </v-text-field>
+          </v-card-title>
+
+          <v-card-text>
+            <v-chip
+              outlined
+              label
+              v-for="(keyword, i) in keywords"
+              :key="i"
+              class="mr-2"
+            >
+              {{ keyword.name }}
+              <v-icon right @click="addVideoLabel(video.id, keyword.id)">
+                mdi-plus-circle
+              </v-icon>
+            </v-chip>
+          </v-card-text>
+        </v-card>
       </v-card-text>
     </v-card>
   </div>
@@ -128,6 +182,9 @@ export default {
   },
 
   data: () => ({
+    settings: {
+      wheelPropagation: false,
+    },
     tab: null,
     videoArr: [],
     video: {},
@@ -137,7 +194,33 @@ export default {
     likeList: [],
     selectedLabel: [],
     unselectedLabel: [],
+    labelSearch: "",
   }),
+
+  computed: {
+    keywords() {
+      if (!this.labelSearch) return [];
+
+      const keywords = [];
+
+      for (const search of this.searching) {
+        keywords.push(search);
+      }
+
+      return keywords;
+    },
+    searching() {
+      if (!this.labelSearch) return this.unselectedLabel;
+
+      const labelSearch = this.labelSearch;
+
+      return this.unselectedLabel.filter((item) => {
+        const text = item.name;
+
+        return text.indexOf(labelSearch) > -1;
+      });
+    },
+  },
 
   watch: {
     "$route.params.id": function (newVal, oldVal) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card>
+    <v-card elevation="10" class="rounded-lg">
       <v-card-title>
         视频标签统计
         <v-spacer></v-spacer>
@@ -52,7 +52,7 @@ export default {
         {
           name: "视频标签统计",
           type: "pie",
-          radius: [30, 150],
+          radius: [50, 150],
           center: ["50%", "50%"],
           roseType: "area",
           itemStyle: {

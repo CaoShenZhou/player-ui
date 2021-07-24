@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card>
+    <v-card elevation="10" class="rounded-lg">
       <v-card-title>
         视频列表
         <v-spacer></v-spacer>

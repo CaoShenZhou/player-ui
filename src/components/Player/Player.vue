@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="height: 585px" :id="videoId"></div>
+    <div :style="'height:' + playerHeight" :id="videoId"></div>
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import "vue-dplayer/dist/vue-dplayer.css";
 
 export default {
   props: {
+    playerHeight: String,
     videoId: String,
     videoUrl: String,
   },
