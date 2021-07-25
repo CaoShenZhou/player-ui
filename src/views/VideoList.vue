@@ -8,30 +8,19 @@
       </v-card-title>
       <!-- 分割线 -->
       <v-divider></v-divider>
-      <v-text-field
-        v-model="path"
-        label="添加路径"
-        single-line
-        hide-details
-        clearable
-        class="mx-4"
-      >
-        <template v-slot:append-outer>
-          <v-icon>mdi-plus-circle-outline</v-icon>
-        </template>
-      </v-text-field>
-      <v-text-field
-        v-model="search"
-        label="搜索"
-        single-line
-        hide-details
-        clearable
-        class="mx-4"
-      >
-        <template v-slot:append-outer>
-          <v-icon>mdi-magnify</v-icon>
-        </template>
-      </v-text-field>
+      <v-card-text>
+        <v-text-field
+          v-model="search"
+          label="搜索"
+          single-line
+          hide-details
+          clearable
+        >
+          <template v-slot:append-outer>
+            <v-icon>mdi-magnify</v-icon>
+          </template>
+        </v-text-field>
+      </v-card-text>
       <v-data-table
         :loading="loading"
         :headers="headers"

@@ -119,12 +119,17 @@
             </v-tabs>
           </v-col>
         </v-row>
+
         <v-slide-group show-arrows>
+          <v-chip class="mt-4 mr-4" @click="addVideoLabelDialog = true" label>
+            添加视频标签
+            <v-icon right> mdi-plus-circle </v-icon>
+          </v-chip>
           <!-- 已选中表标签 -->
           <v-chip
+            class="mt-4 mr-4"
             v-for="item in selectedLabel"
             :key="item.id"
-            class="mt-4 mb-4 mr-2"
             color="green"
             text-color="white"
             label
@@ -135,38 +140,50 @@
             </v-icon>
           </v-chip>
         </v-slide-group>
-        <v-card>
-          <v-card-title>
-            <v-text-field
-              v-model="labelSearch"
-              label="添加视频标签"
-              single-line
-              hide-details
-              clearable
-            >
-              <template v-slot:append-outer>
-                <v-icon>mdi-magnify</v-icon>
-              </template>
-            </v-text-field>
-          </v-card-title>
-
-          <v-card-text>
-            <v-chip
-              outlined
-              label
-              v-for="(keyword, i) in keywords"
-              :key="i"
-              class="mr-2"
-            >
-              {{ keyword.name }}
-              <v-icon right @click="addVideoLabel(video.id, keyword.id)">
-                mdi-plus-circle
-              </v-icon>
-            </v-chip>
-          </v-card-text>
-        </v-card>
       </v-card-text>
     </v-card>
+    <v-dialog v-model="addVideoLabelDialog" scrollable max-width="300px">
+      <v-card>
+        <v-card-title>
+          添加视频标签
+          <v-spacer></v-spacer>
+          <v-btn icon @click="addVideoLabelDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-text-field
+            v-model="labelSearch"
+            label="搜索"
+            single-line
+            hide-details
+            clearable
+          >
+            <template v-slot:append-outer>
+              <v-icon>mdi-magnify</v-icon>
+            </template>
+          </v-text-field>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-text style="height: 300px; padding: unset !important">
+          <v-list dense>
+            <v-list-item-group color="primary">
+              <v-list-item v-for="(keyword, i) in keywords" :key="i">
+                <v-list-item-content>
+                  <v-list-item-title v-text="keyword.name"></v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-icon @click="addVideoLabel(video.id, keyword.id)">
+                    mdi-plus-circle
+                  </v-icon>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -195,11 +212,12 @@ export default {
     selectedLabel: [],
     unselectedLabel: [],
     labelSearch: "",
+    addVideoLabelDialog: false,
   }),
 
   computed: {
     keywords() {
-      if (!this.labelSearch) return [];
+      if (!this.labelSearch) return this.unselectedLabel;
 
       const keywords = [];
 
@@ -210,15 +228,15 @@ export default {
       return keywords;
     },
     searching() {
-      if (!this.labelSearch) return this.unselectedLabel;
-
-      const labelSearch = this.labelSearch;
-
-      return this.unselectedLabel.filter((item) => {
-        const text = item.name;
-
-        return text.indexOf(labelSearch) > -1;
-      });
+      if (!this.labelSearch) {
+        return this.unselectedLabel;
+      } else {
+        const labelSearch = this.labelSearch;
+        return this.unselectedLabel.filter((item) => {
+          const text = item.name;
+          return text.indexOf(labelSearch) > -1;
+        });
+      }
     },
   },
 

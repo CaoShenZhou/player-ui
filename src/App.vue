@@ -40,9 +40,13 @@ export default {
 
 <style>
 .v-dialog > .v-card > .v-card__title {
-  padding: 16px 24px !important;
+  padding: 16px !important;
 }
-.v-dialog > .v-card > .v-card__actions {
-  padding: 8px 24px !important;
+.v-dialog > .v-card > .v-card__text {
+  padding: 16px !important;
+}
+.v-text-field {
+  padding-top: unset !important;
+  margin-top: unset !important;
 }
 </style>
